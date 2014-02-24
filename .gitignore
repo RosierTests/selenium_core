@@ -1,0 +1,7 @@
+# IntelliJ User Configuration #
+###############################
+workspace.xml
+
+# Class files #
+###############################
+*.class
