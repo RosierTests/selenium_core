@@ -1,4 +1,4 @@
-package alpha;
+package authentication;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,11 +12,11 @@ import static junit.framework.Assert.assertTrue;
 
 /**
  * Created By: bsmith on 2/24/14.
- * Package: alpha
+ * Package: authentication
  * Description: This is a template of a fictitious page object representing the first page displayed when navigating
  * to an application. This class utilizes loadable components.
  */
-public class AlphaLoginPage extends LoadableComponent<AlphaLoginPage>{
+public class LoginPage extends LoadableComponent<LoginPage>{
     //The local object of the driver passed in to the constructor.
     private WebDriver localDriver;
 
@@ -44,7 +44,7 @@ public class AlphaLoginPage extends LoadableComponent<AlphaLoginPage>{
     public WebElement nextButton;
 
     //Constructor accepting the driver only as it is the root page in the application structure.
-    public AlphaLoginPage(WebDriver driver) {
+    public LoginPage(WebDriver driver) {
         this.localDriver = driver;
         //Initialize all elements found in the above examples.
         PageFactory.initElements(this.localDriver, this);
