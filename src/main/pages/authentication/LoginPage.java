@@ -35,10 +35,15 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     @FindBy(how= How.CSS, using="form input:last-child")
     public WebElement rememberComputer;
 
+    @FindBy(how= How.XPATH, using="//form/div[@tag='data-alert']/div")
+    public WebElement flashError;
+
     @FindBy(how= How.CSS, using="form button:first-child")
+    @CacheLookup
     public WebElement submitButton;
 
     @FindBy(how= How.CSS, using="form button:last-child")
+    @CacheLookup
     public WebElement createAccountButton;
 
     @FindBy(how= How.CSS, using="form .row:last-child div")
@@ -65,25 +70,28 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     @Override
     protected void isLoaded() throws Error {
         //Assert if the title does not match.
-        String title = localDriver.getTitle();
         assertTrue("The login page does not display.", localDriver.getTitle().equals("MockDriver - Login"));
     }
 
     /**
-     * Enter your account credentials when attempting to log into the application.
+     * Enter your account credentials, select if credentials are cached, and submit. You can enter empty strings for
+     * email address or password to test for errors.
      * @param email your account email address
      * @param password your account password
+     * @param isCached is your account info cached?
      */
-    public void enterEmailAddressAndPassword(String email, String password) {
+    public void submitLogin(String email, String password, Boolean isCached) {
         this.emailInput.sendKeys(email);
         this.passwordInput.sendKeys(password);
+        if (isCached) { rememberComputer.click(); }
+        submitButton.click();
     }
 
     /**
      * Return error messages displayed for email addresses and passwords.
      * @return a concatenated string of both user name and password errors, or an empty string if none.
      */
-    public String getErrorMessages() {
+    public String getInputErrors() {
         String concatenatedErrorMessage = "";
         if (emailInputError.isDisplayed()) {concatenatedErrorMessage += emailInputError.getText();}
         if (!concatenatedErrorMessage.equals("")) {concatenatedErrorMessage += "|";}
@@ -92,9 +100,27 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     }
 
     /**
-     * Submit your credentials.
+     * Return Rails flash error message.
+     * @return a string flash message error
      */
-    public void submitLogin() {
-        submitButton.click();
+    public String getFlashAlertError() {
+        String message;
+        message = flashError.isDisplayed() ? flashError.getText() : "";
+        return message;
+    }
+
+    /**
+     * Select the button to create an account.
+     */
+    public void createAccount() {
+        createAccountButton.click();
+    }
+
+    /**
+     * Return application version string.
+     * @return application version
+     */
+    public String getAppVersion() {
+        return version.getText();
     }
 }
