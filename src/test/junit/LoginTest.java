@@ -1,11 +1,7 @@
 import authentication.LoginPage;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import users.User;
 
 import static junit.framework.Assert.assertTrue;
@@ -20,7 +16,7 @@ public class LoginTest {
      * dynamically through the createUser method of the CreateAccount page enhancing reusable account creation
      * at any point you need it.
      */
-    private User user = new User("Donald", "Knuth", "rocheTesting@gmail.com", "dKnuth", "Pass1234");
+    private User user = new User("Donald", "Knuth", "dknuth@gmail.com", "dknuth", "Pass1234");
     private LoginPage loginPage;
     private String emailErrorText = "You must enter a valid email address.";
     private String passwordErrorText = "You must enter your password.";
@@ -29,7 +25,8 @@ public class LoginTest {
     //Open the browser and navigate to the initial page.
     public static void openBrowser() {
         // Open a new browser window.
-        localDriver = new FirefoxDriver();
+        DriverManager.set(DriverManager.Browser.FIREFOX);
+        localDriver = DriverManager.get();
 
         /* Set the size of the browser window before starting the test. Use this to control testing of the
          * minimum required resolution.
@@ -50,26 +47,47 @@ public class LoginTest {
     }
 
     @Test
+    // Verify errors display when attempting to login without credentials.
     public void loginWithoutCredentials() {
-        loginPage.submitLogin();
-        assertTrue("Check input error messages!", (emailErrorText + "|" + passwordErrorText)
-                .equals(loginPage.getErrorMessages()));
+        loginPage.submitLogin("", "", false);
+        assertTrue("Check login error messages!", (emailErrorText + "|" + passwordErrorText)
+                .equals(loginPage.getInputErrors()));
     }
 
     @Test
+    // Verify password error displays when attempting to login without one.
+    public void loginWithEmailWithoutPassword() {
+        loginPage.submitLogin("", "", false);
+        assertTrue("Check login error messages!", (passwordErrorText)
+                .equals(loginPage.getInputErrors()));
+    }
+
+    @Test
+    // Verify email error displays when attempting to login without one.
+    public void loginWithPasswordWithoutEmail() {
+        loginPage.submitLogin("", "", false);
+        assertTrue("Check login error messages!", (emailErrorText)
+                .equals(loginPage.getInputErrors()));
+    }
+
+    @Test
+    // Verify an error displays above the submit button when attempting to login with invalid credentials.
     public void loginWithInvalidCredentials() {
-
+        loginPage.submitLogin("nouser@gmail.com", "Pass1234", false);
+        assertTrue("Check flash alert message!", "You have entered an invalid email or password.".
+                equals(loginPage.getFlashAlertError()));
     }
 
-    @Test
+    @Ignore
     public void loginWithValidCredentials() {
-
+        loginPage.submitLogin(user.getEmail(), user.getPassword(), false);
     }
 
     @Test
+    // Verify the version schema displays correctly.
     public void verifyAppVersionDisplaysCorrectly() {
-        assertTrue("Application version does not display correctly.",
-                loginPage.version.getText().equals("v0.1.0 [daggerfall]"));
+        String pattern = "v\\d.\\d.\\d \\[\\D{5,}\\]";
+        assertTrue("Application version does not display correctly.", loginPage.getAppVersion().matches(pattern));
     }
 
     @AfterClass
