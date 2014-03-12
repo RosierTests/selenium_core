@@ -110,7 +110,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     }
 
     /**
-     * Select the button to create an account.
+     * Navigate to the create account page.
      */
     public void createAccount() {
         createAccountButton.click();
