@@ -21,8 +21,14 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
     @FindBy(how= How.CSS, using="form .name-field:first-child")
     public WebElement firstNameInput;
 
+    @FindBy(how= How.CSS, using=".name-field:first-child small:last-child")
+    public WebElement firstNameInputError;
+
     @FindBy(how= How.CSS, using="form .name-field:nth-child(2)")
     public WebElement lastNameInput;
+
+    @FindBy(how= How.CSS, using=".name-field:nth-child(2) small:last-child")
+    public WebElement lastNameInputError;
 
     @FindBy(how= How.CSS, using="form .email-field")
     public WebElement emailInput;
@@ -89,6 +95,18 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
         passwordInput.sendKeys(password);
         confirmPasswordInput.sendKeys(confirmPassword);
         createAccountButton.click();
+    }
+
+    /**
+     * Return error messages displayed for all fields.
+     * @return a concatenated string of all input field error messages, or an empty string if none.
+     */
+    public String getInputErrors() {
+        String concatenatedErrorMessage = "";
+        if (firstNameInputError.isDisplayed()) {concatenatedErrorMessage += firstNameInputError.getText();}
+        if (!concatenatedErrorMessage.equals("")) {concatenatedErrorMessage += "|";}
+        if (lastNameInputError.isDisplayed()) {concatenatedErrorMessage += lastNameInputError.getText();}
+        return concatenatedErrorMessage;
     }
 
     /**
