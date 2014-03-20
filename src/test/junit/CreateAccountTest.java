@@ -6,13 +6,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import output.LogResults;
 import users.User;
 
 import static junit.framework.Assert.assertTrue;
 
 /**
  * Created By: Brian Smith on 3/4/14.
- * Description:
+ * Description: This test verifies creating accounts and error messages associated with failed attempts.
  */
 public class CreateAccountTest {
     static WebDriver localDriver;
@@ -22,8 +23,6 @@ public class CreateAccountTest {
      */
     private User user = new User("Donald", "Knuth", "dknuth@gmail.com", "dknuth", "Pass1234");
     private CreateAccountPage createAccountPage;
-    private String firstNameErrorText = "You must enter your first name.";
-    private String lastNameErrorText = "You must enter your last name.";
 
     @BeforeClass
     //Open the browser and navigate to the initial page.
@@ -40,21 +39,52 @@ public class CreateAccountTest {
     }
 
     @Before
-    // The first action before each test is always to navigate to the create account page.
+    // Navigate to the create account page.
     public void navigateToLoginPage() {
         /* x
          *
          */
         LoginPage loginPage = new LoginPage(localDriver);
         createAccountPage = new CreateAccountPage(localDriver, loginPage);
+        createAccountPage.get();
     }
 
     @Test
     // Verify errors display when attempting to login without credentials.
     public void createAccountWithoutAccountInfo() {
+        LogResults.logTestStart("CreateAccountTest", "createAccountWithoutAccountInfo()");
         createAccountPage.submitAccountCreationRequest("", "", "", "", "", "");
-        assertTrue("Check login error messages!", (firstNameErrorText + "|" + lastNameErrorText)
+        assertTrue("Check create account error messages!", ("You must enter your first name.|" +
+                "You must enter your last name.|You must enter a valid email address.|You must enter a username.|" +
+                "You must enter a password of at least 8 characters.")
                 .equals(createAccountPage.getInputErrors()));
+    }
+
+    @Test
+    // Verify errors display when attempting to login without matching passwords.
+    public void createAccountWithNonMatchingPasswords() {
+        LogResults.logTestStart("CreateAccountTest", "createAccountWithTwoDifferentPasswords()");
+        createAccountPage.submitAccountCreationRequest(user.getFirstName(), user.getLastName(), user.getEmail(),
+                user.getUserName(), user.getPassword(), "Pass0000");
+        assertTrue("Check create account error messages!", ("Passwords must match.")
+                .equals(createAccountPage.getInputErrors()));
+    }
+
+    @Test
+    // Verify errors display when attempting to login without matching passwords.
+    public void createAccountWithValidData() {
+        LogResults.logTestStart("CreateAccountTest", "createAccountWithValidData()");
+        createAccountPage.submitAccountCreationRequest(user.getFirstName(), user.getLastName(), user.getEmail(),
+                user.getUserName(), user.getPassword(), user.getPassword());
+        assertTrue("Create account failed.", localDriver.getTitle().equals("TestDriver - Gateway"));
+    }
+
+    @Test
+    // Verify you can navigate back to the login page.
+    public void navigateBackToLoginPage() {
+        LogResults.logTestStart("CreateAccountTest", "navigateBackToLoginPage()");
+        createAccountPage.navigateBackToLoginPage();
+        assertTrue("Login page does not display.", localDriver.getTitle().equals("TestDriver - Login"));
     }
 
     @AfterClass
