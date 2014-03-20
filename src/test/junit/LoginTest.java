@@ -2,13 +2,14 @@ import authentication.LoginPage;
 import org.junit.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import output.LogResults;
 import users.User;
 
 import static junit.framework.Assert.assertTrue;
 
 /**
  * Created By: Brian Smith on 3/4/14.
- * Description:
+ * Description: This test verifies the actions and error messages associated with the login process.
  */
 public class LoginTest {
     static WebDriver localDriver;
@@ -36,7 +37,7 @@ public class LoginTest {
     }
 
     @Before
-    // The first action before each test is always to navigate to the login page.
+    // Navigate to the login page.
     public void navigateToLoginPage() {
         /* Call the LoadableComponent get() method which in turn calls isLoaded() on the class extending
          * LoadableComponent. If isLoaded() causes a failure, the load() method is called and isLoaded() is called
@@ -49,6 +50,7 @@ public class LoginTest {
     @Test
     // Verify errors display when attempting to login without credentials.
     public void loginWithoutCredentials() {
+        LogResults.logTestStart("LoginTest", "loginWithoutCredentials()");
         loginPage.submitLogin("", "", false);
         assertTrue("Check login error messages!", (emailErrorText + "|" + passwordErrorText)
                 .equals(loginPage.getInputErrors()));
@@ -56,16 +58,18 @@ public class LoginTest {
 
     @Test
     // Verify password error displays when attempting to login without one.
-    public void loginWithEmailWithoutPassword() {
-        loginPage.submitLogin("", "", false);
+    public void loginWithoutPassword() {
+        LogResults.logTestStart("LoginTest", "loginWithEmailWithoutPassword()");
+        loginPage.submitLogin(user.getEmail(), "", false);
         assertTrue("Check login error messages!", (passwordErrorText)
                 .equals(loginPage.getInputErrors()));
     }
 
     @Test
     // Verify email error displays when attempting to login without one.
-    public void loginWithPasswordWithoutEmail() {
-        loginPage.submitLogin("", "", false);
+    public void loginWithoutEmail() {
+        LogResults.logTestStart("LoginTest", "loginWithPasswordWithoutEmail()");
+        loginPage.submitLogin("", user.getPassword(), false);
         assertTrue("Check login error messages!", (emailErrorText)
                 .equals(loginPage.getInputErrors()));
     }
@@ -73,6 +77,7 @@ public class LoginTest {
     @Test
     // Verify an error displays above the submit button when attempting to login with invalid credentials.
     public void loginWithInvalidCredentials() {
+        LogResults.logTestStart("LoginTest", "loginWithInvalidCredentials()");
         loginPage.submitLogin("nouser@gmail.com", "Pass1234", false);
         assertTrue("Check flash alert message!", "You have entered an invalid email or password.".
                 equals(loginPage.getFlashAlertError()));
@@ -80,6 +85,7 @@ public class LoginTest {
 
     @Ignore
     public void loginWithValidCredentials() {
+        LogResults.logTestStart("LoginTest", "loginWithValidCredentials()");
         loginPage.submitLogin(user.getEmail(), user.getPassword(), false);
     }
 
@@ -87,6 +93,7 @@ public class LoginTest {
     // Verify the version schema displays correctly.
     public void verifyAppVersionDisplaysCorrectly() {
         String pattern = "v\\d.\\d.\\d \\[\\D{5,}\\]";
+        LogResults.logTestStart("LoginTest", "verifyAppVersionDisplaysCorrectly()");
         assertTrue("Application version does not display correctly.", loginPage.getAppVersion().matches(pattern));
     }
 
