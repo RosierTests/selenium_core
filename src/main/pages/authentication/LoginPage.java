@@ -1,5 +1,6 @@
 package authentication;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
@@ -7,13 +8,14 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
+import output.LogResults;
 
 import static junit.framework.Assert.assertTrue;
 
 /**
  * Created By: Brian Smith on 2/24/14.
  * Package: authentication
- * Description:
+ * Description: This page represents the login page.
  */
 public class LoginPage extends LoadableComponent<LoginPage>{
     private WebDriver localDriver;
@@ -35,9 +37,6 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     @FindBy(how= How.CSS, using="form input:last-child")
     public WebElement rememberComputer;
 
-    @FindBy(how= How.XPATH, using="//form/div[@tag='data-alert']/div")
-    public WebElement flashError;
-
     @FindBy(how= How.CSS, using="form button:first-child")
     @CacheLookup
     public WebElement submitButton;
@@ -48,6 +47,8 @@ public class LoginPage extends LoadableComponent<LoginPage>{
 
     @FindBy(how= How.CSS, using="form .row:last-child div")
     public WebElement version;
+
+    By flashError = By.cssSelector("form #flash_alert");
 
     public LoginPage(WebDriver driver) {
         this.localDriver = driver;
@@ -60,7 +61,10 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     @Override
     protected void load() {
         localDriver.manage().deleteAllCookies();
+        LogResults.logAction("LoginPage", "load()", "Delete all cookies.");
+
         localDriver.navigate().to("http://localhost:3000");
+        LogResults.logAction("LoginPage", "load()", "Open site.");
     }
 
     /**
@@ -70,7 +74,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     @Override
     protected void isLoaded() throws Error {
         //Assert if the title does not match.
-        assertTrue("The login page does not display.", localDriver.getTitle().equals("MockDriver - Login"));
+        assertTrue("The login page does not display.", localDriver.getTitle().equals("TestDriver - Login"));
     }
 
     /**
@@ -85,6 +89,9 @@ public class LoginPage extends LoadableComponent<LoginPage>{
         this.passwordInput.sendKeys(password);
         if (isCached) { rememberComputer.click(); }
         submitButton.click();
+
+        LogResults.logAction("LoginPage", "submitLogin()", "Email: \"" + email + "\", Password: \"" + password + "\", IsCached: " +
+                isCached);
     }
 
     /**
@@ -94,8 +101,11 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     public String getInputErrors() {
         String concatenatedErrorMessage = "";
         if (emailInputError.isDisplayed()) {concatenatedErrorMessage += emailInputError.getText();}
-        if (!concatenatedErrorMessage.equals("")) {concatenatedErrorMessage += "|";}
+        if (!concatenatedErrorMessage.equals("") && passwordInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         if (passwordInputError.isDisplayed()) {concatenatedErrorMessage += passwordInputError.getText();}
+
+        LogResults.logAction("LoginPage", "getInputErrors()", "Email Error: \"" + emailInputError.getText() +
+                "\", Password Error: \"" + passwordInputError.getText() + "\"");
         return concatenatedErrorMessage;
     }
 
@@ -105,7 +115,9 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      */
     public String getFlashAlertError() {
         String message;
-        message = flashError.isDisplayed() ? flashError.getText() : "";
+        message = (!localDriver.findElement(flashError).isDisplayed() ? "" : localDriver.findElement(flashError).getText());
+
+        LogResults.logAction("LoginPage", "getFlashAlertError()", "Error: \"" + message + "\"");
         return message;
     }
 
@@ -114,6 +126,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      */
     public void createAccount() {
         createAccountButton.click();
+        LogResults.logAction("LoginPage", "createAccount()", "Click create account button.");
     }
 
     /**
@@ -121,6 +134,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      * @return application version
      */
     public String getAppVersion() {
+        LogResults.logAction("LoginPage", "getAppVersion()", "Version: \"" + version.getText() + "\"");
         return version.getText();
     }
 }
