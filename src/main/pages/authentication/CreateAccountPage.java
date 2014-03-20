@@ -6,41 +6,54 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
+import output.LogResults;
 
 import static junit.framework.Assert.assertTrue;
 
 /**
  * Created By: Brian Smith on 3/10/14.
  * Package: authentication
- * Description:
+ * Description: This page represents the create account page.
  */
 public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
     private WebDriver localDriver;
     private LoadableComponent parent;
 
-    @FindBy(how= How.CSS, using="form .name-field:first-child")
+    @FindBy(how= How.NAME, using="firstname")
     public WebElement firstNameInput;
 
-    @FindBy(how= How.CSS, using=".name-field:first-child small:last-child")
+    @FindBy(how= How.CSS, using="form .row:nth-child(2) .name-field:first-child small:last-child")
     public WebElement firstNameInputError;
 
-    @FindBy(how= How.CSS, using="form .name-field:nth-child(2)")
+    @FindBy(how= How.NAME, using="lastname")
     public WebElement lastNameInput;
 
-    @FindBy(how= How.CSS, using=".name-field:nth-child(2) small:last-child")
+    @FindBy(how= How.CSS, using="form .row:nth-child(2) .name-field:nth-child(2) small:last-child")
     public WebElement lastNameInputError;
 
-    @FindBy(how= How.CSS, using="form .email-field")
+    @FindBy(how= How.NAME, using="email")
     public WebElement emailInput;
 
-    @FindBy(how= How.CSS, using="form .name-field:last-child")
+    @FindBy(how= How.CSS, using=".email-field small:last-child")
+    public WebElement emailInputError;
+
+    @FindBy(how= How.NAME, using="username")
     public WebElement userNameInput;
 
-    @FindBy(how= How.CSS, using="form .password-field")
+    @FindBy(how= How.CSS, using="form .row:nth-child(4) .name-field small:last-child")
+    public WebElement userNameInputError;
+
+    @FindBy(how= How.NAME, using="password")
     public WebElement passwordInput;
 
-    @FindBy(how= How.CSS, using="form .password-confirmation-field")
+    @FindBy(how= How.CSS, using=".password-field small:last-child")
+    public WebElement passwordInputError;
+
+    @FindBy(how= How.NAME, using="confirmpassword")
     public WebElement confirmPasswordInput;
+
+    @FindBy(how= How.CSS, using=".password-confirmation-field small:last-child")
+    public WebElement confirmPasswordInputError;
 
     @FindBy(how= How.CSS, using="form a")
     public WebElement termsOfUseLink;
@@ -74,7 +87,7 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      */
     @Override
     protected void isLoaded() throws Error {
-        assertTrue("Create Account page does not display.", localDriver.getTitle().equals("MockDriver - Create Account"));
+        assertTrue("Create Account page does not display.", localDriver.getTitle().equals("TestDriver - Create Account"));
     }
 
     /**
@@ -88,13 +101,25 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      */
     public void submitAccountCreationRequest(String firstName, String lastName, String email, String userName, String password,
                                   String confirmPassword) {
-        firstNameInput.sendKeys(firstName);
-        lastNameInput.sendKeys(lastName);
-        emailInput.sendKeys(email);
-        userNameInput.sendKeys(userName);
-        passwordInput.sendKeys(password);
-        confirmPasswordInput.sendKeys(confirmPassword);
+        inputDataOrClear(firstNameInput, firstName);
+        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter first name \"" +
+                firstName + "\"");
+        inputDataOrClear(lastNameInput, lastName);
+        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter last name \"" +
+                lastName + "\"");
+        inputDataOrClear(emailInput, email);
+        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter email \"" + email + "\"");
+        inputDataOrClear(userNameInput, userName);
+        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter user name \"" +
+                userName + "\"");
+        inputDataOrClear(passwordInput, password);
+        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter password \"" +
+                password + "\"");
+        inputDataOrClear(confirmPasswordInput, confirmPassword);
+        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()",
+                "Enter confirm password \"" + confirmPassword + "\"");
         createAccountButton.click();
+        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Click create account button.");
     }
 
     /**
@@ -103,9 +128,30 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      */
     public String getInputErrors() {
         String concatenatedErrorMessage = "";
+        // First Name
         if (firstNameInputError.isDisplayed()) {concatenatedErrorMessage += firstNameInputError.getText();}
-        if (!concatenatedErrorMessage.equals("")) {concatenatedErrorMessage += "|";}
+        if (!concatenatedErrorMessage.equals("") && lastNameInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
+        // Last Name
         if (lastNameInputError.isDisplayed()) {concatenatedErrorMessage += lastNameInputError.getText();}
+        if (!concatenatedErrorMessage.equals("") && emailInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
+        // Email Address
+        if (emailInputError.isDisplayed()) {concatenatedErrorMessage += emailInputError.getText();}
+        if (!concatenatedErrorMessage.equals("") && userNameInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
+        // User name
+        if (userNameInputError.isDisplayed()) {concatenatedErrorMessage += userNameInputError.getText();}
+        if (!concatenatedErrorMessage.equals("") && passwordInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
+        // Password
+        if (passwordInputError.isDisplayed()) {concatenatedErrorMessage += passwordInputError.getText();}
+        if (!concatenatedErrorMessage.equals("") &&
+                confirmPasswordInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
+        // Password Confirmation
+        if (confirmPasswordInputError.isDisplayed()) {concatenatedErrorMessage += confirmPasswordInputError.getText();}
+
+        LogResults.logAction("CreateAccountPage", "getInputErrors()", "First Name Error: \"" +
+                firstNameInputError.getText() + "\", Last Name Error: \"" + lastNameInputError.getText() +
+                "\", Email Error: \"" + emailInputError.getText() + "\", User Name Error: \"" +
+                userNameInputError.getText() + "\", Password Error: \"" + passwordInputError.getText() +
+                "\", Password Confirmation Error: \"" + confirmPasswordInputError.getText() + "\"");
         return concatenatedErrorMessage;
     }
 
@@ -114,5 +160,19 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      */
     public void navigateBackToLoginPage() {
         returnToLoginButton.click();
+        LogResults.logAction("CreateAccountPage", "navigateBackToLoginPage()", "Click return to login button.");
+    }
+
+    /**
+     * Clear the input if an empty string is found, otherwise input the text.
+     * @param element WebElement
+     * @param text input text
+     */
+    private void inputDataOrClear(WebElement element, String text) {
+        if (text.equals("") || text == null) {
+            element.clear();
+        }else {
+            element.sendKeys(text);
+        }
     }
 }
