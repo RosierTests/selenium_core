@@ -1,4 +1,4 @@
-package users;
+package utilities.users;
 
 import java.util.Random;
 
@@ -19,7 +19,7 @@ public class User {
      * @param password password
      */
     public User(String firstName, String lastName, String email, String userName, String password) {
-        this.userInfo = new String[] {firstName, lastName, email, userName + generateRandomUserNameID(), password};
+        this.userInfo = new String[] {firstName, lastName, email, userName, password};
     }
 
     /**
