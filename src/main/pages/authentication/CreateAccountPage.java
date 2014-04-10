@@ -1,14 +1,17 @@
-package authentication;
+package pages.authentication;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
-import output.LogResults;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import utilities.output.MessageLogger;
 
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Created By: Brian Smith on 3/10/14.
@@ -64,6 +67,8 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
     @FindBy(how= How.CSS, using="form button:last-child")
     public WebElement returnToLoginButton;
 
+    public By flashError = By.cssSelector("form #flash_notice");
+
     public CreateAccountPage(WebDriver driver, LoadableComponent parent) {
         this.localDriver = driver;
         this.parent = parent;
@@ -79,6 +84,11 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
 
         LoginPage page = new LoginPage(localDriver);
         page.createAccount();
+
+        new WebDriverWait(localDriver, 30).until(
+                ExpectedConditions.titleIs("TestDriver - Create Account"));
+
+        MessageLogger.logAction("CreateAccountPage", "load()", "Load create account page.");
     }
 
     /**
@@ -102,24 +112,24 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
     public void submitAccountCreationRequest(String firstName, String lastName, String email, String userName, String password,
                                   String confirmPassword) {
         inputDataOrClear(firstNameInput, firstName);
-        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter first name \"" +
+        MessageLogger.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter first name \"" +
                 firstName + "\"");
         inputDataOrClear(lastNameInput, lastName);
-        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter last name \"" +
+        MessageLogger.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter last name \"" +
                 lastName + "\"");
         inputDataOrClear(emailInput, email);
-        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter email \"" + email + "\"");
+        MessageLogger.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter email \"" + email + "\"");
         inputDataOrClear(userNameInput, userName);
-        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter user name \"" +
+        MessageLogger.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter user name \"" +
                 userName + "\"");
         inputDataOrClear(passwordInput, password);
-        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter password \"" +
+        MessageLogger.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Enter password \"" +
                 password + "\"");
         inputDataOrClear(confirmPasswordInput, confirmPassword);
-        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()",
+        MessageLogger.logAction("CreateAccountPage", "submitAccountCreationRequest()",
                 "Enter confirm password \"" + confirmPassword + "\"");
         createAccountButton.click();
-        LogResults.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Click create account button.");
+        MessageLogger.logAction("CreateAccountPage", "submitAccountCreationRequest()", "Click create account button.");
     }
 
     /**
@@ -147,7 +157,7 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
         // Password Confirmation
         if (confirmPasswordInputError.isDisplayed()) {concatenatedErrorMessage += confirmPasswordInputError.getText();}
 
-        LogResults.logAction("CreateAccountPage", "getInputErrors()", "First Name Error: \"" +
+        MessageLogger.logAction("CreateAccountPage", "getInputErrors()", "First Name Error: \"" +
                 firstNameInputError.getText() + "\", Last Name Error: \"" + lastNameInputError.getText() +
                 "\", Email Error: \"" + emailInputError.getText() + "\", User Name Error: \"" +
                 userNameInputError.getText() + "\", Password Error: \"" + passwordInputError.getText() +
@@ -160,7 +170,7 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      */
     public void navigateBackToLoginPage() {
         returnToLoginButton.click();
-        LogResults.logAction("CreateAccountPage", "navigateBackToLoginPage()", "Click return to login button.");
+        MessageLogger.logAction("CreateAccountPage", "navigateBackToLoginPage()", "Click return to login button.");
     }
 
     /**
