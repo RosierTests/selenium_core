@@ -1,16 +1,17 @@
-package authentication;
+package pages.authentication;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
-import output.LogResults;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import utilities.output.MessageLogger;
 
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Created By: Brian Smith on 2/24/14.
@@ -21,14 +22,12 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     private WebDriver localDriver;
 
     @FindBy(how= How.CSS, using=".email-field input")
-    @CacheLookup
     public WebElement emailInput;
 
     @FindBy(how= How.CSS, using=".email-field small:last-child")
     public WebElement emailInputError;
 
     @FindBy(how= How.CSS, using=".password-field input")
-    @CacheLookup
     public WebElement passwordInput;
 
     @FindBy(how= How.CSS, using=".password-field small:last-child")
@@ -38,17 +37,15 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     public WebElement rememberComputer;
 
     @FindBy(how= How.CSS, using="form button:first-child")
-    @CacheLookup
     public WebElement submitButton;
 
     @FindBy(how= How.CSS, using="form button:last-child")
-    @CacheLookup
     public WebElement createAccountButton;
 
     @FindBy(how= How.CSS, using="form .row:last-child div")
     public WebElement version;
 
-    By flashError = By.cssSelector("form #flash_alert");
+    public By flashError = By.cssSelector("form #flash_alert");
 
     public LoginPage(WebDriver driver) {
         this.localDriver = driver;
@@ -61,10 +58,13 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     @Override
     protected void load() {
         localDriver.manage().deleteAllCookies();
-        LogResults.logAction("LoginPage", "load()", "Delete all cookies.");
+        MessageLogger.logAction("LoginPage", "load()", "Delete all cookies.");
 
         localDriver.navigate().to("http://localhost:3000");
-        LogResults.logAction("LoginPage", "load()", "Open site.");
+        new WebDriverWait(localDriver, 30).until(
+                ExpectedConditions.titleIs("TestDriver - Login"));
+
+        MessageLogger.logAction("LoginPage", "load()", "Navigate to login page.");
     }
 
     /**
@@ -90,7 +90,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
         if (isCached) { rememberComputer.click(); }
         submitButton.click();
 
-        LogResults.logAction("LoginPage", "submitLogin()", "Email: \"" + email + "\", Password: \"" + password + "\", IsCached: " +
+        MessageLogger.logAction("LoginPage", "submitLogin()", "Email: \"" + email + "\", Password: \"" + password + "\", IsCached: " +
                 isCached);
     }
 
@@ -104,7 +104,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
         if (!concatenatedErrorMessage.equals("") && passwordInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         if (passwordInputError.isDisplayed()) {concatenatedErrorMessage += passwordInputError.getText();}
 
-        LogResults.logAction("LoginPage", "getInputErrors()", "Email Error: \"" + emailInputError.getText() +
+        MessageLogger.logAction("LoginPage", "getInputErrors()", "Email Error: \"" + emailInputError.getText() +
                 "\", Password Error: \"" + passwordInputError.getText() + "\"");
         return concatenatedErrorMessage;
     }
@@ -117,7 +117,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
         String message;
         message = (!localDriver.findElement(flashError).isDisplayed() ? "" : localDriver.findElement(flashError).getText());
 
-        LogResults.logAction("LoginPage", "getFlashAlertError()", "Error: \"" + message + "\"");
+        MessageLogger.logAction("LoginPage", "getFlashAlertError()", "Flash Error: \"" + message + "\"");
         return message;
     }
 
@@ -126,7 +126,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      */
     public void createAccount() {
         createAccountButton.click();
-        LogResults.logAction("LoginPage", "createAccount()", "Click create account button.");
+        MessageLogger.logAction("LoginPage", "createAccount()", "Click create account button.");
     }
 
     /**
@@ -134,7 +134,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      * @return application version
      */
     public String getAppVersion() {
-        LogResults.logAction("LoginPage", "getAppVersion()", "Version: \"" + version.getText() + "\"");
+        MessageLogger.logAction("LoginPage", "getAppVersion()", "Version: \"" + version.getText() + "\"");
         return version.getText();
     }
 }
