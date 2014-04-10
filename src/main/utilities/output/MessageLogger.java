@@ -1,4 +1,4 @@
-package output;
+package utilities.output;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
  * Package: output
  * Description: This class logs test data.
  */
-public class LogResults {
+public class MessageLogger {
     /**
      * Log the suite and name of the test performed.
      * @param suite suite containing test
@@ -60,11 +60,27 @@ public class LogResults {
      * @param suite suite containing test
      * @param test test
      */
-    public static Boolean logFail(String suite, String test) {
+    public static Boolean logFail(String suite, String test, String message) {
         Logger logger = LogManager.getLogger("[TEST FAILED]");
 
         logger.entry();
-        logger.info(test + " in suite " + suite);
+        logger.info(test + " in suite " + suite + " - " + message);
+        logger.exit();
+
+        return true;
+    }
+
+    /**
+     * Log error for debugging.
+     * @param page name of page object
+     * @param method method logging error
+     * @param message message
+     */
+    public static Boolean logError(String page, String method, String message) {
+        Logger logger = LogManager.getLogger("[ERROR]");
+
+        logger.entry();
+        logger.info(method + " on page " + page + " - " + message);
         logger.exit();
 
         return true;
