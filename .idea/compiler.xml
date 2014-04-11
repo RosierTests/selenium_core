@@ -25,6 +25,9 @@
         <module name="se2-template" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="se2-template" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>
 
