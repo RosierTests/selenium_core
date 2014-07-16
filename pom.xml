@@ -90,11 +90,11 @@
                     </dependencies>
                     <configuration>
                         <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                    </configuration>
-                    <!-- <configuration>
+                        <!--
                         <parallel>classes</parallel>
                         <threadCount>3</threadCount>
-                    </configuration> -->
+                        -->
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
