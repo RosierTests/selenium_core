@@ -2,6 +2,10 @@
 ###############################
 workspace.xml
 
-# Class files #
+# Class Files #
 ###############################
 *.class
+
+# Maven Directories #
+###############################
+/target
