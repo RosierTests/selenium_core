@@ -1,5 +1,7 @@
 package users;
 
+import utilities.users.User;
+
 /**
  * Created By: bsmith on 2/26/14.
  * Package: users
