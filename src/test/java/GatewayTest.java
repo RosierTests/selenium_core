@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.GatewayPage;
 import pages.authentication.LoginPage;
+import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import utilities.Accounts;
@@ -23,6 +24,7 @@ import static utilities.AssertSpecial.assertTrue;
  * Created By: Brian Smith on 3/19/14.
  * Description: This test verifies the actions and error messages associated within the main gateway page.
  */
+@Description("Verify various home page data elements and controls.")
 public class GatewayTest {
     static WebDriver localDriver;
     private static String[] user = new String[]{"Daenerys", "Targaryen", "dtargaryen@gmail.com",

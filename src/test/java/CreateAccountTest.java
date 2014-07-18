@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.authentication.CreateAccountPage;
 import pages.authentication.LoginPage;
+import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import utilities.DriverManager;
@@ -23,6 +24,7 @@ import static utilities.AssertSpecial.assertTrue;
  * Created By: Brian Smith on 3/4/14.
  * Description: This test verifies creating accounts and error messages associated with failed attempts.
  */
+@Description("Validate created accounts and errors displayed when attempting to create accounts with invalid data.")
 public class CreateAccountTest {
     static WebDriver localDriver;
     /* Set a new User object with basic user data. This must be valid info in the database. You could also assign this

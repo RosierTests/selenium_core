@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.authentication.LoginPage;
+import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import utilities.Accounts;
@@ -20,6 +21,7 @@ import static utilities.AssertSpecial.assertTrue;
  * Created By: Brian Smith on 3/4/14.
  * Description: This test verifies the actions and error messages associated with the login process.
  */
+@Description("Perform various login tests. This includes verifying errors displayed when attempting to login with invalid credentials.")
 public class LoginTest {
     static WebDriver localDriver;
     /* Set a new User object with basic user data. This must be valid info in the database. You could also assign this
