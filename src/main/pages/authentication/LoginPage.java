@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.yandex.qatools.allure.annotations.Parameter;
 import ru.yandex.qatools.allure.annotations.Step;
 import utilities.output.MessageLogger;
 
@@ -21,6 +22,18 @@ import static junit.framework.TestCase.assertTrue;
  */
 public class LoginPage extends LoadableComponent<LoginPage>{
     private WebDriver localDriver;
+
+    @Parameter("Email Error Message")
+    private String emailErrorMessage;
+
+    @Parameter("Password Error Message")
+    private String passwordErrorMessage;
+
+    @Parameter("Flash Alert Message")
+    private String flashAlertMessage;
+
+    @Parameter("App Version")
+    private String appVersion;
 
     @FindBy(how= How.CSS, using=".email-field input")
     public WebElement emailInput;
@@ -103,12 +116,18 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     @Step
     public String getInputErrors() {
         String concatenatedErrorMessage = "";
-        if (emailInputError.isDisplayed()) {concatenatedErrorMessage += emailInputError.getText();}
+        if (emailInputError.isDisplayed()) {
+            emailErrorMessage = emailInputError.getText();
+            concatenatedErrorMessage += emailErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") && passwordInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
-        if (passwordInputError.isDisplayed()) {concatenatedErrorMessage += passwordInputError.getText();}
+        if (passwordInputError.isDisplayed()) {
+            passwordErrorMessage = passwordInputError.getText();
+            concatenatedErrorMessage += passwordErrorMessage;
+        }
 
-        MessageLogger.logAction("LoginPage", "getInputErrors()", "Email Error: \"" + emailInputError.getText() +
-                "\", Password Error: \"" + passwordInputError.getText() + "\"");
+        MessageLogger.logAction("LoginPage", "getInputErrors()", "Email Error: \"" + emailErrorMessage +
+                "\", Password Error: \"" + passwordErrorMessage + "\"");
         return concatenatedErrorMessage;
     }
 
@@ -118,11 +137,10 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      */
     @Step
     public String getFlashAlertError() {
-        String message;
-        message = (!localDriver.findElement(flashError).isDisplayed() ? "" : localDriver.findElement(flashError).getText());
+        flashAlertMessage = (!localDriver.findElement(flashError).isDisplayed() ? "" : localDriver.findElement(flashError).getText());
 
-        MessageLogger.logAction("LoginPage", "getFlashAlertError()", "Flash Error: \"" + message + "\"");
-        return message;
+        MessageLogger.logAction("LoginPage", "getFlashAlertError()", "Flash Error: \"" + flashAlertMessage + "\"");
+        return flashAlertMessage;
     }
 
     /**
@@ -140,7 +158,8 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      */
     @Step
     public String getAppVersion() {
-        MessageLogger.logAction("LoginPage", "getAppVersion()", "Version: \"" + version.getText() + "\"");
-        return version.getText();
+        appVersion = version.getText();
+        MessageLogger.logAction("LoginPage", "getAppVersion()", "Version: \"" + appVersion + "\"");
+        return appVersion;
     }
 }

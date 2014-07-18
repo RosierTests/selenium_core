@@ -26,7 +26,7 @@ public class GatewayPage extends LoadableComponent<GatewayPage>{
     private String userName;
     private String password;
 
-    @Parameter
+    @Parameter("Welcome Message")
     private String welcomeMessage;
 
     @FindBy(how= How.CSS, using=".row p")

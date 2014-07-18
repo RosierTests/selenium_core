@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.yandex.qatools.allure.annotations.Parameter;
 import ru.yandex.qatools.allure.annotations.Step;
 import utilities.output.MessageLogger;
 
@@ -22,6 +23,24 @@ import static junit.framework.TestCase.assertTrue;
 public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
     private WebDriver localDriver;
     private LoadableComponent parent;
+
+    @Parameter("First Name Error Message")
+    private String firstNameErrorMessage;
+
+    @Parameter("Last Name Error Message")
+    private String lastNameErrorMessage;
+
+    @Parameter("Email Error Message")
+    private String emailErrorMessage;
+
+    @Parameter("User Name Error Message")
+    private String userNameErrorMessage;
+
+    @Parameter("Password Error Message")
+    private String passwordErrorMessage;
+
+    @Parameter("Confirm Password Error Message")
+    private String confirmPasswordErrorMessage;
 
     @FindBy(how= How.NAME, using="firstname")
     public WebElement firstNameInput;
@@ -142,29 +161,46 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
     public String getInputErrors() {
         String concatenatedErrorMessage = "";
         // First Name
-        if (firstNameInputError.isDisplayed()) {concatenatedErrorMessage += firstNameInputError.getText();}
+        if (firstNameInputError.isDisplayed()) {
+            firstNameErrorMessage = firstNameInputError.getText();
+            concatenatedErrorMessage += firstNameErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") && lastNameInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         // Last Name
-        if (lastNameInputError.isDisplayed()) {concatenatedErrorMessage += lastNameInputError.getText();}
+        if (lastNameInputError.isDisplayed()) {
+            lastNameErrorMessage = lastNameInputError.getText();
+            concatenatedErrorMessage += lastNameErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") && emailInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         // Email Address
-        if (emailInputError.isDisplayed()) {concatenatedErrorMessage += emailInputError.getText();}
+        if (emailInputError.isDisplayed()) {
+            emailErrorMessage = emailInputError.getText();
+            concatenatedErrorMessage += emailErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") && userNameInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         // User name
-        if (userNameInputError.isDisplayed()) {concatenatedErrorMessage += userNameInputError.getText();}
+        if (userNameInputError.isDisplayed()) {
+            userNameErrorMessage = userNameInputError.getText();
+            concatenatedErrorMessage += userNameErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") && passwordInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         // Password
-        if (passwordInputError.isDisplayed()) {concatenatedErrorMessage += passwordInputError.getText();}
+        if (passwordInputError.isDisplayed()) {
+            passwordErrorMessage = passwordInputError.getText();
+            concatenatedErrorMessage += passwordErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") &&
                 confirmPasswordInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         // Password Confirmation
-        if (confirmPasswordInputError.isDisplayed()) {concatenatedErrorMessage += confirmPasswordInputError.getText();}
+        if (confirmPasswordInputError.isDisplayed()) {
+            confirmPasswordErrorMessage = confirmPasswordInputError.getText();
+            concatenatedErrorMessage += confirmPasswordErrorMessage;
+        }
 
         MessageLogger.logAction("CreateAccountPage", "getInputErrors()", "First Name Error: \"" +
-                firstNameInputError.getText() + "\", Last Name Error: \"" + lastNameInputError.getText() +
-                "\", Email Error: \"" + emailInputError.getText() + "\", User Name Error: \"" +
-                userNameInputError.getText() + "\", Password Error: \"" + passwordInputError.getText() +
-                "\", Password Confirmation Error: \"" + confirmPasswordInputError.getText() + "\"");
+                firstNameErrorMessage + "\", Last Name Error: \"" + lastNameErrorMessage + "\", Email Error: \"" +
+                emailErrorMessage + "\", User Name Error: \"" + userNameErrorMessage + "\", Password Error: \"" +
+                passwordErrorMessage + "\", Password Confirmation Error: \"" + confirmPasswordErrorMessage + "\"");
         return concatenatedErrorMessage;
     }
 
