@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.yandex.qatools.allure.annotations.Step;
 import utilities.output.MessageLogger;
 
 import static junit.framework.TestCase.assertTrue;
@@ -84,6 +85,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      * @param password your account password
      * @param isCached is your account info cached?
      */
+    @Step("Submit login with email \"{0}\" and password \"{1}\".")
     public void submitLogin(String email, String password, Boolean isCached) {
         this.emailInput.sendKeys(email);
         this.passwordInput.sendKeys(password);
@@ -98,6 +100,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      * Return error messages displayed for email addresses and passwords.
      * @return a concatenated string of both user name and password errors, or an empty string if none.
      */
+    @Step
     public String getInputErrors() {
         String concatenatedErrorMessage = "";
         if (emailInputError.isDisplayed()) {concatenatedErrorMessage += emailInputError.getText();}
@@ -113,6 +116,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      * Return Rails flash error message.
      * @return a string flash message error
      */
+    @Step
     public String getFlashAlertError() {
         String message;
         message = (!localDriver.findElement(flashError).isDisplayed() ? "" : localDriver.findElement(flashError).getText());
@@ -124,6 +128,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
     /**
      * Navigate to the create account page.
      */
+    @Step
     public void createAccount() {
         createAccountButton.click();
         MessageLogger.logAction("LoginPage", "createAccount()", "Click create account button.");
@@ -133,6 +138,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      * Return application version string.
      * @return application version
      */
+    @Step
     public String getAppVersion() {
         MessageLogger.logAction("LoginPage", "getAppVersion()", "Version: \"" + version.getText() + "\"");
         return version.getText();

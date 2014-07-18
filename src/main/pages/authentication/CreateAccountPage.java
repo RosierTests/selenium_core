@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.yandex.qatools.allure.annotations.Step;
 import utilities.output.MessageLogger;
 
 import static junit.framework.TestCase.assertTrue;
@@ -109,6 +110,7 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      * @param password user's password
      * @param confirmPassword user's password
      */
+    @Step("Submit account creation request with first name \"{0}\", last name \"{1}\", email \"{2}\", username \"{3}\", password \"{4}\", and confirm password \"{5}\".")
     public void submitAccountCreationRequest(String firstName, String lastName, String email, String userName, String password,
                                   String confirmPassword) {
         inputDataOrClear(firstNameInput, firstName);
@@ -136,6 +138,7 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      * Return error messages displayed for all fields.
      * @return a concatenated string of all input field error messages, or an empty string if none.
      */
+    @Step
     public String getInputErrors() {
         String concatenatedErrorMessage = "";
         // First Name
@@ -168,6 +171,7 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
     /**
      * Navigate back to the login page.
      */
+    @Step
     public void navigateBackToLoginPage() {
         returnToLoginButton.click();
         MessageLogger.logAction("CreateAccountPage", "navigateBackToLoginPage()", "Click return to login button.");
@@ -178,6 +182,7 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      * @param element WebElement
      * @param text input text
      */
+    @Step("Enter \"{1}\".")
     private void inputDataOrClear(WebElement element, String text) {
         if (text.equals("") || text == null) {
             element.clear();
