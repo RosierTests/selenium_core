@@ -9,6 +9,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Step;
 import utilities.output.MessageLogger;
 
 import static junit.framework.TestCase.assertTrue;
@@ -21,6 +23,24 @@ import static junit.framework.TestCase.assertTrue;
 public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
     private WebDriver localDriver;
     private LoadableComponent parent;
+
+    @Parameter("First Name Error Message")
+    private String firstNameErrorMessage;
+
+    @Parameter("Last Name Error Message")
+    private String lastNameErrorMessage;
+
+    @Parameter("Email Error Message")
+    private String emailErrorMessage;
+
+    @Parameter("User Name Error Message")
+    private String userNameErrorMessage;
+
+    @Parameter("Password Error Message")
+    private String passwordErrorMessage;
+
+    @Parameter("Confirm Password Error Message")
+    private String confirmPasswordErrorMessage;
 
     @FindBy(how= How.NAME, using="firstname")
     public WebElement firstNameInput;
@@ -109,6 +129,7 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      * @param password user's password
      * @param confirmPassword user's password
      */
+    @Step("Submit account creation request with first name \"{0}\", last name \"{1}\", email \"{2}\", username \"{3}\", password \"{4}\", and confirm password \"{5}\".")
     public void submitAccountCreationRequest(String firstName, String lastName, String email, String userName, String password,
                                   String confirmPassword) {
         inputDataOrClear(firstNameInput, firstName);
@@ -136,38 +157,57 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      * Return error messages displayed for all fields.
      * @return a concatenated string of all input field error messages, or an empty string if none.
      */
+    @Step
     public String getInputErrors() {
         String concatenatedErrorMessage = "";
         // First Name
-        if (firstNameInputError.isDisplayed()) {concatenatedErrorMessage += firstNameInputError.getText();}
+        if (firstNameInputError.isDisplayed()) {
+            firstNameErrorMessage = firstNameInputError.getText();
+            concatenatedErrorMessage += firstNameErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") && lastNameInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         // Last Name
-        if (lastNameInputError.isDisplayed()) {concatenatedErrorMessage += lastNameInputError.getText();}
+        if (lastNameInputError.isDisplayed()) {
+            lastNameErrorMessage = lastNameInputError.getText();
+            concatenatedErrorMessage += lastNameErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") && emailInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         // Email Address
-        if (emailInputError.isDisplayed()) {concatenatedErrorMessage += emailInputError.getText();}
+        if (emailInputError.isDisplayed()) {
+            emailErrorMessage = emailInputError.getText();
+            concatenatedErrorMessage += emailErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") && userNameInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         // User name
-        if (userNameInputError.isDisplayed()) {concatenatedErrorMessage += userNameInputError.getText();}
+        if (userNameInputError.isDisplayed()) {
+            userNameErrorMessage = userNameInputError.getText();
+            concatenatedErrorMessage += userNameErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") && passwordInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         // Password
-        if (passwordInputError.isDisplayed()) {concatenatedErrorMessage += passwordInputError.getText();}
+        if (passwordInputError.isDisplayed()) {
+            passwordErrorMessage = passwordInputError.getText();
+            concatenatedErrorMessage += passwordErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") &&
                 confirmPasswordInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
         // Password Confirmation
-        if (confirmPasswordInputError.isDisplayed()) {concatenatedErrorMessage += confirmPasswordInputError.getText();}
+        if (confirmPasswordInputError.isDisplayed()) {
+            confirmPasswordErrorMessage = confirmPasswordInputError.getText();
+            concatenatedErrorMessage += confirmPasswordErrorMessage;
+        }
 
         MessageLogger.logAction("CreateAccountPage", "getInputErrors()", "First Name Error: \"" +
-                firstNameInputError.getText() + "\", Last Name Error: \"" + lastNameInputError.getText() +
-                "\", Email Error: \"" + emailInputError.getText() + "\", User Name Error: \"" +
-                userNameInputError.getText() + "\", Password Error: \"" + passwordInputError.getText() +
-                "\", Password Confirmation Error: \"" + confirmPasswordInputError.getText() + "\"");
+                firstNameErrorMessage + "\", Last Name Error: \"" + lastNameErrorMessage + "\", Email Error: \"" +
+                emailErrorMessage + "\", User Name Error: \"" + userNameErrorMessage + "\", Password Error: \"" +
+                passwordErrorMessage + "\", Password Confirmation Error: \"" + confirmPasswordErrorMessage + "\"");
         return concatenatedErrorMessage;
     }
 
     /**
      * Navigate back to the login page.
      */
+    @Step
     public void navigateBackToLoginPage() {
         returnToLoginButton.click();
         MessageLogger.logAction("CreateAccountPage", "navigateBackToLoginPage()", "Click return to login button.");
@@ -178,6 +218,7 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage>{
      * @param element WebElement
      * @param text input text
      */
+    @Step("Enter \"{1}\".")
     private void inputDataOrClear(WebElement element, String text) {
         if (text.equals("") || text == null) {
             element.clear();

@@ -9,10 +9,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.GatewayPage;
 import pages.authentication.LoginPage;
+import ru.yandex.qatools.allure.annotations.Description;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
 import utilities.Accounts;
 import utilities.DriverManager;
 import utilities.ElapsedTime;
 import utilities.output.MessageLogger;
+import utilities.output.Screenshot;
 
 import static utilities.AssertSpecial.assertTrue;
 
@@ -20,11 +24,13 @@ import static utilities.AssertSpecial.assertTrue;
  * Created By: Brian Smith on 3/19/14.
  * Description: This test verifies the actions and error messages associated within the main gateway page.
  */
+@Description("Verify various home page data elements and controls.")
 public class GatewayTest {
     static WebDriver localDriver;
     private static String[] user = new String[]{"Daenerys", "Targaryen", "dtargaryen@gmail.com",
             "dtargaryen", "Pass1234"};
     private GatewayPage gatewayPage;
+    private Screenshot screenshot;
 
     @BeforeClass
     //Open the browser and navigate to the initial page.
@@ -46,6 +52,7 @@ public class GatewayTest {
     // Navigate to the gateway page.
     public void navigateToLoginPage() {
         ElapsedTime.setStartTime();
+        screenshot = new Screenshot(localDriver);
 
         /* Call the LoadableComponent get() method which in turn calls isLoaded() on the class extending
          * LoadableComponent. If isLoaded() causes a failure, the load() method is called and isLoaded() is called
@@ -56,15 +63,22 @@ public class GatewayTest {
         gatewayPage.get();
     }
 
+    @Features("Gateway")
+    @Stories("Verify welcome message")
     @Test
     // Verify the welcome message displays the current user's name.
     public void verifyWelcomeMessage() throws Exception {
+        String welcomeMessage = gatewayPage.getWelcomeMessage();
         MessageLogger.logTestStart("GatewayTest", "VerifyWelcomeMessage");
+
+        screenshot.getScreenShot();
         assertTrue("GatewayTest", "VerifyWelcomeMessage",
-                "Welcome message is incorrect: \"" + gatewayPage.getWelcomeMessage() + "\"",
-                gatewayPage.getWelcomeMessage().equals("Welcome, " + user[0] + " " + user[1] + "."));
+                "Welcome message is incorrect: \"" + welcomeMessage + "\"",
+                welcomeMessage.equals("Welcome, " + user[0] + " " + user[1] + "."));
     }
 
+    @Features("Gateway")
+    @Stories("Logout")
     @Test
     // Verify user can log out of their account.
     public void logout() throws Exception {
@@ -77,6 +91,7 @@ public class GatewayTest {
             MessageLogger.logError("GatewayTest", "Logout", "Login page does not display.");
         }
 
+        screenshot.getScreenShot();
         assertTrue("GatewayTest", "Logout", "Logout failed.",
                 localDriver.getTitle().equals("TestDriver - Login"));
     }

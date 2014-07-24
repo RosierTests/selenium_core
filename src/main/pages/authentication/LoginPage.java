@@ -9,6 +9,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Step;
 import utilities.output.MessageLogger;
 
 import static junit.framework.TestCase.assertTrue;
@@ -20,6 +22,18 @@ import static junit.framework.TestCase.assertTrue;
  */
 public class LoginPage extends LoadableComponent<LoginPage>{
     private WebDriver localDriver;
+
+    @Parameter("Email Error Message")
+    private String emailErrorMessage;
+
+    @Parameter("Password Error Message")
+    private String passwordErrorMessage;
+
+    @Parameter("Flash Alert Message")
+    private String flashAlertMessage;
+
+    @Parameter("App Version")
+    private String appVersion;
 
     @FindBy(how= How.CSS, using=".email-field input")
     public WebElement emailInput;
@@ -84,6 +98,7 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      * @param password your account password
      * @param isCached is your account info cached?
      */
+    @Step("Submit login with email \"{0}\" and password \"{1}\".")
     public void submitLogin(String email, String password, Boolean isCached) {
         this.emailInput.sendKeys(email);
         this.passwordInput.sendKeys(password);
@@ -98,14 +113,21 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      * Return error messages displayed for email addresses and passwords.
      * @return a concatenated string of both user name and password errors, or an empty string if none.
      */
+    @Step
     public String getInputErrors() {
         String concatenatedErrorMessage = "";
-        if (emailInputError.isDisplayed()) {concatenatedErrorMessage += emailInputError.getText();}
+        if (emailInputError.isDisplayed()) {
+            emailErrorMessage = emailInputError.getText();
+            concatenatedErrorMessage += emailErrorMessage;
+        }
         if (!concatenatedErrorMessage.equals("") && passwordInputError.isDisplayed()) {concatenatedErrorMessage += "|";}
-        if (passwordInputError.isDisplayed()) {concatenatedErrorMessage += passwordInputError.getText();}
+        if (passwordInputError.isDisplayed()) {
+            passwordErrorMessage = passwordInputError.getText();
+            concatenatedErrorMessage += passwordErrorMessage;
+        }
 
-        MessageLogger.logAction("LoginPage", "getInputErrors()", "Email Error: \"" + emailInputError.getText() +
-                "\", Password Error: \"" + passwordInputError.getText() + "\"");
+        MessageLogger.logAction("LoginPage", "getInputErrors()", "Email Error: \"" + emailErrorMessage +
+                "\", Password Error: \"" + passwordErrorMessage + "\"");
         return concatenatedErrorMessage;
     }
 
@@ -113,17 +135,18 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      * Return Rails flash error message.
      * @return a string flash message error
      */
+    @Step
     public String getFlashAlertError() {
-        String message;
-        message = (!localDriver.findElement(flashError).isDisplayed() ? "" : localDriver.findElement(flashError).getText());
+        flashAlertMessage = (!localDriver.findElement(flashError).isDisplayed() ? "" : localDriver.findElement(flashError).getText());
 
-        MessageLogger.logAction("LoginPage", "getFlashAlertError()", "Flash Error: \"" + message + "\"");
-        return message;
+        MessageLogger.logAction("LoginPage", "getFlashAlertError()", "Flash Error: \"" + flashAlertMessage + "\"");
+        return flashAlertMessage;
     }
 
     /**
      * Navigate to the create account page.
      */
+    @Step
     public void createAccount() {
         createAccountButton.click();
         MessageLogger.logAction("LoginPage", "createAccount()", "Click create account button.");
@@ -133,8 +156,10 @@ public class LoginPage extends LoadableComponent<LoginPage>{
      * Return application version string.
      * @return application version
      */
+    @Step
     public String getAppVersion() {
-        MessageLogger.logAction("LoginPage", "getAppVersion()", "Version: \"" + version.getText() + "\"");
-        return version.getText();
+        appVersion = version.getText();
+        MessageLogger.logAction("LoginPage", "getAppVersion()", "Version: \"" + appVersion + "\"");
+        return appVersion;
     }
 }

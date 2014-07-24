@@ -9,6 +9,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.authentication.LoginPage;
+import ru.yandex.qatools.allure.annotations.Parameter;
+import ru.yandex.qatools.allure.annotations.Step;
 import utilities.output.MessageLogger;
 
 import static junit.framework.TestCase.assertTrue;
@@ -23,6 +25,9 @@ public class GatewayPage extends LoadableComponent<GatewayPage>{
     private LoadableComponent parent;
     private String userName;
     private String password;
+
+    @Parameter("Welcome Message")
+    private String welcomeMessage;
 
     @FindBy(how= How.CSS, using=".row p")
     public WebElement welcomeText;
@@ -67,6 +72,7 @@ public class GatewayPage extends LoadableComponent<GatewayPage>{
     /**
      * Logout.
      */
+    @Step
     public void logout() {
         logoutButton.click();
         MessageLogger.logAction("GatewayPage", "logout()", "Click the logout button.");
@@ -76,8 +82,10 @@ public class GatewayPage extends LoadableComponent<GatewayPage>{
      * Get welcome message text.
      * @return welcome message text
      */
+    @Step
     public String getWelcomeMessage() {
-        MessageLogger.logAction("GatewayPage", "getWelcomeMessage()", welcomeText.getText());
-        return welcomeText.getText();
+        welcomeMessage = welcomeText.getText();
+        MessageLogger.logAction("GatewayPage", "getWelcomeMessage()", welcomeMessage);
+        return welcomeMessage;
     }
 }

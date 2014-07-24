@@ -5,10 +5,14 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.authentication.LoginPage;
+import ru.yandex.qatools.allure.annotations.Description;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
 import utilities.Accounts;
 import utilities.DriverManager;
 import utilities.ElapsedTime;
 import utilities.output.MessageLogger;
+import utilities.output.Screenshot;
 import utilities.users.User;
 
 import static utilities.AssertSpecial.assertTrue;
@@ -17,6 +21,7 @@ import static utilities.AssertSpecial.assertTrue;
  * Created By: Brian Smith on 3/4/14.
  * Description: This test verifies the actions and error messages associated with the login process.
  */
+@Description("Perform various login tests. This includes verifying errors displayed when attempting to login with invalid credentials.")
 public class LoginTest {
     static WebDriver localDriver;
     /* Set a new User object with basic user data. This must be valid info in the database. You could also assign this
@@ -27,6 +32,7 @@ public class LoginTest {
     private LoginPage loginPage;
     private String emailErrorText = "You must enter a valid email address.";
     private String passwordErrorText = "You must enter your password.";
+    private Screenshot screenshot;
 
     @BeforeClass
     //Open the browser and navigate to the initial page.
@@ -45,6 +51,7 @@ public class LoginTest {
     // Navigate to the login page.
     public void navigateToLoginPage() {
         ElapsedTime.setStartTime();
+        screenshot = new Screenshot(localDriver);
 
         /* Call the LoadableComponent get() method which in turn calls isLoaded() on the class extending
          * LoadableComponent. If isLoaded() causes a failure, the load() method is called and isLoaded() is called
@@ -54,37 +61,48 @@ public class LoginTest {
         loginPage.get();
     }
 
+    @Features("Login")
+    @Stories("Login without credentials")
     @Test
     // Verify errors display when attempting to login without credentials.
     public void loginWithoutCredentials() throws Exception {
         MessageLogger.logTestStart("LoginTest", "LoginWithoutCredentials");
         loginPage.submitLogin("", "", false);
 
+        screenshot.getScreenShot();
         assertTrue("LoginTest", "LoginWithoutCredentials",
                 "Check login error messages!",
                 (emailErrorText + "|" + passwordErrorText).equals(loginPage.getInputErrors()));
     }
 
+    @Features("Login")
+    @Stories("Login without password")
     @Test
     // Verify password error displays when attempting to login without one.
     public void loginWithoutPassword() throws Exception {
         MessageLogger.logTestStart("LoginTest", "LoginWithoutPassword");
         loginPage.submitLogin(user.getEmail(), "", false);
 
+        screenshot.getScreenShot();
         assertTrue("LoginTest", "LoginWithoutPassword",
                 "Check login error messages!", (passwordErrorText).equals(loginPage.getInputErrors()));
     }
 
+    @Features("Login")
+    @Stories("Login without email")
     @Test
     // Verify email error displays when attempting to login without one.
     public void loginWithoutEmail() throws Exception {
         MessageLogger.logTestStart("LoginTest", "LoginWithoutEmail");
         loginPage.submitLogin("", user.getPassword(), false);
 
+        screenshot.getScreenShot();
         assertTrue("LoginTest", "LoginWithoutEmail",
                 "Check login error messages!", (emailErrorText).equals(loginPage.getInputErrors()));
     }
 
+    @Features("Login")
+    @Stories("Login with invalid credentials")
     @Test
     // Verify an error displays above the submit button when attempting to login with invalid credentials.
     public void loginWithInvalidCredentials() throws Exception {
@@ -98,11 +116,14 @@ public class LoginTest {
             MessageLogger.logError("LoginTest", "LoginWithInvalidCredentials", "No error message displays.");
         }
 
+        screenshot.getScreenShot();
         assertTrue("LoginTest", "LoginWithInvalidCredentials",
                 "Check flash alert message!",
                 "You have entered an invalid email or password.".equals(loginPage.getFlashAlertError()));
     }
 
+    @Features("Login")
+    @Stories("Login with valid credentials")
     @Test
     // Verify valid credentials can be used to log into an account.
     public void loginWithValidCredentials() throws Exception {
@@ -117,16 +138,20 @@ public class LoginTest {
             MessageLogger.logError("LoginTest", "LoginWithValidCredentials", "Gateway page does not display.");
         }
 
+        screenshot.getScreenShot();
         assertTrue("LoginTest", "LoginWithValidCredentials",
                 "Cannot log into account.", localDriver.getTitle().equals("TestDriver - Gateway"));
     }
 
+    @Features("Login")
+    @Stories("Verify app version displays correctly")
     @Test
     // Verify the version schema displays correctly.
     public void verifyAppVersionDisplaysCorrectly() throws Exception {
         String pattern = "v\\d.\\d.\\d \\[\\D{5,}\\]";
         MessageLogger.logTestStart("LoginTest", "VerifyAppVersionDisplaysCorrectly");
 
+        screenshot.getScreenShot();
         assertTrue("LoginTest", "VerifyAppVersionDisplaysCorrectly",
                 "Application version does not display correctly.", loginPage.getAppVersion().matches(pattern));
     }

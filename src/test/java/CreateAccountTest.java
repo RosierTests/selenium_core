@@ -9,9 +9,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.authentication.CreateAccountPage;
 import pages.authentication.LoginPage;
+import ru.yandex.qatools.allure.annotations.Description;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
 import utilities.DriverManager;
 import utilities.ElapsedTime;
 import utilities.output.MessageLogger;
+import utilities.output.Screenshot;
 import utilities.users.User;
 
 import static utilities.AssertSpecial.assertTrue;
@@ -20,6 +24,7 @@ import static utilities.AssertSpecial.assertTrue;
  * Created By: Brian Smith on 3/4/14.
  * Description: This test verifies creating accounts and error messages associated with failed attempts.
  */
+@Description("Validate created accounts and errors displayed when attempting to create accounts with invalid data.")
 public class CreateAccountTest {
     static WebDriver localDriver;
     /* Set a new User object with basic user data. This must be valid info in the database. You could also assign this
@@ -28,6 +33,7 @@ public class CreateAccountTest {
      */
     private User user = new User("Cersei", "Lannister", "clannister@gmail.com", "clannister", "Pass1234");
     private CreateAccountPage createAccountPage;
+    private Screenshot screenshot;
 
     @BeforeClass
     //Open the browser and navigate to the initial page.
@@ -46,6 +52,7 @@ public class CreateAccountTest {
     // Navigate to the create account page.
     public void navigateToLoginPage() {
         ElapsedTime.setStartTime();
+        screenshot = new Screenshot(localDriver);
 
         /* x
          *
@@ -55,18 +62,23 @@ public class CreateAccountTest {
         createAccountPage.get();
     }
 
+    @Features("Create Account")
+    @Stories("Create account without account info")
     @Test
     // Verify errors display when attempting to login without credentials.
     public void createAccountWithoutAccountInfo() throws Exception {
         MessageLogger.logTestStart("CreateAccountTest", "CreateAccountWithoutAccountInfo");
         createAccountPage.submitAccountCreationRequest("", "", "", "", "", "");
 
+        screenshot.getScreenShot();
         assertTrue("CreateAccountTest", "CreateAccountWithoutAccountInfo", "Check create account error messages!",
                 ("You must enter your first name.|" +
                 "You must enter your last name.|You must enter a valid email address.|You must enter a username.|" +
                 "You must enter a password of at least 8 characters.").equals(createAccountPage.getInputErrors()));
     }
 
+    @Features("Create Account")
+    @Stories("Create account with non-matching passwords")
     @Test
     // Verify errors display when attempting to login without matching passwords.
     public void createAccountWithNonMatchingPasswords() throws Exception {
@@ -74,11 +86,14 @@ public class CreateAccountTest {
         createAccountPage.submitAccountCreationRequest(user.getFirstName(), user.getLastName(), user.getEmail(),
                 user.getUserName(), user.getPassword(), "Pass0000");
 
+        screenshot.getScreenShot();
         assertTrue("CreateAccountTest", "CreateAccountWithNonMatchingPasswords",
                 "Check create account error messages!", ("Passwords must match.")
                         .equals(createAccountPage.getInputErrors()));
     }
 
+    @Features("Create Account")
+    @Stories("Create account with valid data")
     @Test
     // Verify errors display when attempting to login without matching passwords.
     public void createAccountWithValidData() throws Exception {
@@ -93,10 +108,13 @@ public class CreateAccountTest {
                         localDriver.findElement(createAccountPage.flashError).getText());
         }
 
+        screenshot.getScreenShot();
         assertTrue("CreateAccountTest", "CreateAccountWithValidData",
                 "Account cannot be created.", localDriver.getTitle().equals("TestDriver - Gateway"));
     }
 
+    @Features("Create Account")
+    @Stories("Navigate back to login page")
     @Test
     // Verify you can navigate back to the login page.
     public void navigateBackToLoginPage() throws Exception {
@@ -109,6 +127,7 @@ public class CreateAccountTest {
             MessageLogger.logError("CreateAccountTest", "NavigateBackToLoginPage", "Login page does not display.");
         }
 
+        screenshot.getScreenShot();
         assertTrue("CreateAccountTest", "NavigateBackToLoginPage",
                 "Login page does not display.", localDriver.getTitle().equals("TestDriver - Login"));
     }
