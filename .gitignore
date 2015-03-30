@@ -1,11 +1,21 @@
-# IntelliJ User Configuration #
-###############################
-workspace.xml
+# IntelliJ #
+#####################
+.idea/
+*.iml
+*.iws
 
-# Class Files #
-###############################
-*.class
+# Eclipse #
+#####################
+.classpath
+.project
+.settings/
 
 # Maven Directories #
-###############################
-/target
+#####################
+target/
+test-results/
+log/
+
+# OS X #
+#####################
+.DS_Store
