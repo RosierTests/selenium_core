@@ -1,9 +1,12 @@
 package utilities.output;
 
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.allure.annotations.Attachment;
+import ru.yandex.qatools.ashot.AShot;
+
+import javax.imageio.ImageIO;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Created By: bsmith on 7/16/14.
@@ -15,14 +18,20 @@ public class Screenshot{
 
     public Screenshot(WebDriver driver){ this.localDriver = driver; }
 
-    public void getScreenShot() {
-        TakesScreenshot shooter = (TakesScreenshot)localDriver;
-        byte[] rawShot = shooter.getScreenshotAs(OutputType.BYTES);
-        saveScreenShot(rawShot);
-    }
+    @Attachment(value = "Page")
+    public byte[] getScreenShot() {
+        ru.yandex.qatools.ashot.Screenshot s = new AShot().takeScreenshot(localDriver);
 
-    @Attachment(type = "image/png")
-    public byte[] saveScreenShot(byte[] screenShot) {
-        return screenShot;
+        try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ImageIO.write(s.getImage(), "png", stream);
+            stream.flush();
+            byte[] image = stream.toByteArray();
+            stream.close();
+            return image;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
