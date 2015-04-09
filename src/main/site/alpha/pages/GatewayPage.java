@@ -1,27 +1,24 @@
-package pages;
+package site.alpha.pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.How;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.authentication.LoginPage;
 import ru.yandex.qatools.allure.annotations.Parameter;
 import ru.yandex.qatools.allure.annotations.Step;
-import utilities.output.MessageLogger;
+import site.BasePage;
+import site.alpha.pages.authentication.LoginPage;
 
-import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.Is.is;
 
 /**
  * Created By: Brian Smith on 3/18/14.
  * Package: none
  * Description: This page represents the home page.
  */
-public class GatewayPage extends LoadableComponent<GatewayPage>{
-    private WebDriver localDriver;
+public class GatewayPage extends BasePage{
     private LoadableComponent parent;
     private String userName;
     private String password;
@@ -29,18 +26,17 @@ public class GatewayPage extends LoadableComponent<GatewayPage>{
     @Parameter("Welcome Message")
     private String welcomeMessage;
 
-    @FindBy(how= How.CSS, using=".row p")
+    @FindBy(css = ".row p")
     public WebElement welcomeText;
 
-    @FindBy(how= How.CSS, using="button")
+    @FindBy(css = "button")
     public WebElement logoutButton;
 
     public GatewayPage(WebDriver driver, LoadableComponent parent, String userName, String password) {
-        this.localDriver = driver;
+        super(driver);
         this.parent = parent;
         this.userName = userName;
         this.password = password;
-        PageFactory.initElements(this.localDriver, this);
     }
 
     /**
@@ -53,10 +49,7 @@ public class GatewayPage extends LoadableComponent<GatewayPage>{
         LoginPage page = new LoginPage(localDriver);
         page.submitLogin(this.userName, this.password, false);
 
-        new WebDriverWait(localDriver, 30).until(
-                ExpectedConditions.titleIs("TestDriver - Gateway"));
-
-        MessageLogger.logAction("GatewayPage", "load()", "Login to Gateway.");
+        waitUntilTitleIs("TestDriver - Gateway", 30);
     }
 
     /**
@@ -66,7 +59,7 @@ public class GatewayPage extends LoadableComponent<GatewayPage>{
     @Override
     protected void isLoaded() throws Error {
         //Assert if the title does not match.
-        assertTrue("The home page does not display.", localDriver.getTitle().equals("TestDriver - Gateway"));
+        assertThat("The home page does not display.", getPageTitle(), is(equalTo("TestDriver - Gateway")));
     }
 
     /**
@@ -74,8 +67,8 @@ public class GatewayPage extends LoadableComponent<GatewayPage>{
      */
     @Step
     public void logout() {
-        logoutButton.click();
-        MessageLogger.logAction("GatewayPage", "logout()", "Click the logout button.");
+        click(logoutButton);
+        waitUntilTitleIs("TestDriver - Login", 30);
     }
 
     /**
@@ -85,7 +78,6 @@ public class GatewayPage extends LoadableComponent<GatewayPage>{
     @Step
     public String getWelcomeMessage() {
         welcomeMessage = welcomeText.getText();
-        MessageLogger.logAction("GatewayPage", "getWelcomeMessage()", welcomeMessage);
         return welcomeMessage;
     }
 }
