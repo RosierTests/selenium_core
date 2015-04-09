@@ -40,8 +40,8 @@ public class BaseTest {
         }
     }
 
-    public static void navigateTo(String page) {
-        localDriver.navigate().to("https://cookmedcom:SYjdLT2I2V@beta.cookmedical.com/" + page);
+    public static void navigate_to(String page) {
+        localDriver.navigate().to("http://localhost:3000/" + page);
     }
 
     public static void openBrowser(String testName) {
