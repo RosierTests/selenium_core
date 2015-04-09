@@ -1,6 +1,4 @@
-package users;
-
-import utilities.users.User;
+package utilities.users;
 
 /**
  * Created By: bsmith on 2/26/14.
