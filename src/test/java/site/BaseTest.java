@@ -41,7 +41,7 @@ public class BaseTest {
     }
 
     public static void navigate_to(String page) {
-        localDriver.navigate().to("http://localhost:3000/" + page);
+        localDriver.navigate().to(System.getProperty("url", "http://no_valid_url") + "/" + page);
     }
 
     public static void openBrowser(String testName) {

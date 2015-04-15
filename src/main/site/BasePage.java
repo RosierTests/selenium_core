@@ -80,7 +80,7 @@ public class BasePage extends LoadableComponent<BasePage> {
     }
 
     public void navigate_to(String page) {
-        localDriver.navigate().to("http://localhost:3000/" + page);
+        localDriver.navigate().to(System.getProperty("url", "http://no_valid_url") + "/" + page);
     }
 
     public void removeAllCookies() {
