@@ -1,8 +1,8 @@
-package site.alpha;
+package site;
 
 import org.openqa.selenium.WebDriver;
-import site.alpha.pages.authentication.CreateAccountPage;
-import site.alpha.pages.authentication.LoginPage;
+import site.pages.authentication.CreateAccountPage;
+import site.pages.authentication.LoginPage;
 import utilities.DriverManager;
 
 /**

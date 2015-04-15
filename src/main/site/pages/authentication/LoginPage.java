@@ -1,4 +1,4 @@
-package site.alpha.pages.authentication;
+package site.pages.authentication;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

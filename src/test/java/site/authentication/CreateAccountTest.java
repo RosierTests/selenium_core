@@ -1,4 +1,4 @@
-package site.alpha;
+package site.authentication;
 
 import org.junit.After;
 import org.junit.Before;
@@ -7,8 +7,8 @@ import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import site.BaseTest;
-import site.alpha.pages.authentication.CreateAccountPage;
-import site.alpha.pages.authentication.LoginPage;
+import site.pages.authentication.CreateAccountPage;
+import site.pages.authentication.LoginPage;
 import utilities.users.User;
 
 import static org.hamcrest.MatcherAssert.assertThat;

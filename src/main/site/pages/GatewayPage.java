@@ -1,4 +1,4 @@
-package site.alpha.pages;
+package site.pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.LoadableComponent;
 import ru.yandex.qatools.allure.annotations.Parameter;
 import ru.yandex.qatools.allure.annotations.Step;
 import site.BasePage;
-import site.alpha.pages.authentication.LoginPage;
+import site.pages.authentication.LoginPage;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
