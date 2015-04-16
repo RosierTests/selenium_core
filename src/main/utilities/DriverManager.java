@@ -82,7 +82,7 @@ public class DriverManager {
                     case "false":
                         bsCap.setCapability("browser", System.getProperty("browser", "firefox"));
                         bsCap.setCapability("browser_version", System.getProperty("browser_version", "34"));
-                        bsCap.setCapability("resolution", "1024x768");
+                        bsCap.setCapability("resolution", System.getProperty("resolution", "1280x800"));
                         break;
                     default:
                         throw new Error("Mobile system property must be set to either true or false.");
