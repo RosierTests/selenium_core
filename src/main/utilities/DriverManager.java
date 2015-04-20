@@ -176,7 +176,7 @@ public class DriverManager {
 
                 return driver;
             default:
-                throw new Error("Remote system property must be set to either true or false.");
+                throw new Error("Remote system property must be set to browserstack or saucelabs. False is the default.");
         }
     }
 }
