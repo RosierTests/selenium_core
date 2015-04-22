@@ -89,7 +89,7 @@ public class LoginTest extends BaseTest{
 
     @After
     public void tearDown() {
-        BaseTest.getScreenShot();
-        BaseTest.localDriver.quit();
+        getScreenShot();
+        quit();
     }
 }

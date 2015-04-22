@@ -56,7 +56,7 @@ public class GatewayTest extends BaseTest{
 
     @After
     public void tearDown() {
-        BaseTest.getScreenShot();
-        BaseTest.localDriver.quit();
+        getScreenShot();
+        quit();
     }
 }
