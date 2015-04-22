@@ -51,9 +51,18 @@ public class BaseTest {
     }
 
     public  void openBrowser(String testName) {
-        localDriver = DriverManager.get(testName);
+        do {
+            localDriver = DriverManager.get(testName);
+        }while (localDriver.toString().contains("null"));
+
         if (System.getProperty("remote", "false").equals("false")) {
             setBrowserDimensions(1024,768);
+        }
+    }
+
+    public void quit() {
+        if (!localDriver.toString().contains("null")) {
+            localDriver.quit();
         }
     }
 
