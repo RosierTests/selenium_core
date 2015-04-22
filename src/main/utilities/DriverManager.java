@@ -12,7 +12,6 @@ import org.openqa.selenium.safari.SafariDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Random;
 
 /**
  * Created By: bsmith on 3/10/14.
@@ -97,12 +96,8 @@ public class DriverManager {
                     buildNumber = "0" + buildNumber;
                 }
 
-                // Create random number as local identifier if not supplied.
-                Random randomGenerator = new Random();
-                Integer randomNum = randomGenerator.nextInt(100000);
-
                 bsCap.setCapability("browserstack.local", "true");
-                bsCap.setCapability("browserstack.localIdentifier", System.getProperty("test_id", randomNum.toString()));
+                bsCap.setCapability("browserstack.localIdentifier", System.getProperty("test_id", "1"));
                 bsCap.setCapability("build", System.getProperty("browser", "firefox") + "-" + buildNumber);
                 bsCap.setCapability("project", System.getProperty("project_name", "Unknown"));
 
