@@ -1,14 +1,11 @@
 package site;
 
+import drivers.DriverManager;
 import org.junit.Rule;
 import org.junit.rules.TestName;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import drivers.DriverManager;
 import output.Screenshot;
 
 /**
@@ -17,28 +14,29 @@ import output.Screenshot;
  */
 public class BaseTest {
 
-    public  WebDriver localDriver;
+    public WebDriver localDriver;
 
     @Rule
     public TestName testName = new TestName();
 
     public Boolean getScreenShot() {
-        if (!localDriver.toString().contains("null")) {
+        try {
             Screenshot screenshot = new Screenshot(localDriver);
             screenshot.getScreenShot();
             return true;
-        }else {
+        }catch (NullPointerException e) {
+            System.out.println("Cannot take screenshot as the browser is not available.");
             return false;
         }
     }
 
-    public  void hideElement(WebElement element) {
+    public void hideElement(WebElement element) {
         ((JavascriptExecutor)localDriver).executeScript("arguments[0].style.visibility='hidden'", element);
         new WebDriverWait(localDriver, 15).until(
                 ExpectedConditions.not(ExpectedConditions.visibilityOf(element)));
     }
 
-    public  void manualWait(Integer seconds) {
+    public void manualWait(Integer seconds) {
         try {
             Thread.sleep(seconds * 1000);
         }catch (InterruptedException e) {
@@ -46,11 +44,11 @@ public class BaseTest {
         }
     }
 
-    public  void navigate_to(String page) {
+    public void navigate_to(String page) {
         localDriver.navigate().to(System.getProperty("url", "http://no_valid_url") + "/" + page);
     }
 
-    public  void openBrowser(String testName) {
+    public void openBrowser(String testName) {
         do {
             localDriver = DriverManager.get(testName);
         }while (localDriver.toString().contains("null"));
@@ -58,17 +56,19 @@ public class BaseTest {
         if (System.getProperty("remote", "false").equals("false")) {
             String res = System.getProperty("resolution", "1024x768");
             String[] sRes = res.split("x");
-            setBrowserDimensions(Integer.parseInt(sRes[0]),Integer.parseInt(sRes[1]));
+            setBrowserDimensions(Integer.parseInt(sRes[0]), Integer.parseInt(sRes[1]));
         }
     }
 
     public void quit() {
-        if (!localDriver.toString().contains("null")) {
+        try {
             localDriver.quit();
+        }catch (NullPointerException e) {
+            System.out.println("Cannot quit as the browser is not available.");
         }
     }
 
-    public  void setBrowserDimensions(Integer w, Integer h) {
+    public void setBrowserDimensions(Integer w, Integer h) {
         Dimension browserWindow = new Dimension(w, h);
         localDriver.manage().window().setSize(browserWindow);
     }
