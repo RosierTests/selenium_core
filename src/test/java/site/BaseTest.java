@@ -8,8 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import utilities.DriverManager;
-import utilities.output.Screenshot;
+import drivers.DriverManager;
+import output.Screenshot;
 
 /**
  * Created By: Brian Smith on 10/8/14.
@@ -56,7 +56,9 @@ public class BaseTest {
         }while (localDriver.toString().contains("null"));
 
         if (System.getProperty("remote", "false").equals("false")) {
-            setBrowserDimensions(1024,768);
+            String res = System.getProperty("resolution", "1024x768");
+            String[] sRes = res.split("x");
+            setBrowserDimensions(Integer.parseInt(sRes[0]),Integer.parseInt(sRes[1]));
         }
     }
 
