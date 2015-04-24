@@ -1,4 +1,4 @@
-package site;
+package users;
 
 import org.openqa.selenium.WebDriver;
 import site.pages.authentication.CreateAccountPage;

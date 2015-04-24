@@ -9,6 +9,7 @@ import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
 import site.pages.GatewayPage;
 import site.pages.authentication.LoginPage;
+import users.Accounts;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;

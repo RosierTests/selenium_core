@@ -6,7 +6,7 @@ import org.junit.Test;
 import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Features;
 import ru.yandex.qatools.allure.annotations.Stories;
-import site.Accounts;
+import users.Accounts;
 import site.BaseTest;
 import site.pages.authentication.LoginPage;
 import users.User;

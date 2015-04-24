@@ -8,7 +8,12 @@ import java.util.Random;
  * Description: Create basic user data all users have in common.
  */
 public class User {
-    private String[] userInfo;
+
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String userName;
+    private String password;
 
     /**
      * The constructor sets all basic user account data into a field array of strings.
@@ -19,7 +24,11 @@ public class User {
      * @param password password
      */
     public User(String firstName, String lastName, String email, String userName, String password) {
-        this.userInfo = new String[] {firstName, lastName, email, userName, password};
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
     }
 
     /**
@@ -27,7 +36,7 @@ public class User {
      * @return user's first name
      */
     public String getFirstName() {
-        return this.userInfo[0];
+        return this.firstName;
     }
 
     /**
@@ -35,7 +44,7 @@ public class User {
      * @param firstName user's first name
      */
     public void setFirstName(String firstName) {
-        this.userInfo[0] = firstName;
+        this.firstName = firstName;
     }
 
     /**
@@ -43,7 +52,7 @@ public class User {
      * @return user's last name
      */
     public String getLastName() {
-        return this.userInfo[1];
+        return this.lastName;
     }
 
     /**
@@ -51,7 +60,7 @@ public class User {
      * @param lastName user's last name
      */
     public void setLastName(String lastName) {
-        this.userInfo[1] = lastName;
+        this.lastName = lastName;
     }
 
     /**
@@ -59,7 +68,7 @@ public class User {
      * @return user's email address
      */
     public String getEmail() {
-        return this.userInfo[2];
+        return this.email;
     }
 
     /**
@@ -67,7 +76,7 @@ public class User {
      * @param email user's email address
      */
     public void setEmailAddress(String email) {
-        this.userInfo[2] = email;
+        this.email = email;
     }
 
     /**
@@ -75,7 +84,7 @@ public class User {
      * @return user's user name
      */
     public String getUserName() {
-        return this.userInfo[3];
+        return this.userName;
     }
 
     /**
@@ -83,7 +92,7 @@ public class User {
      * @param userName user's user name
      */
     public void setUserName(String userName) {
-        this.userInfo[3] = userName;
+        this.userName = userName;
     }
 
     /**
@@ -91,7 +100,7 @@ public class User {
      * @return user's password
      */
     public String getPassword() {
-        return this.userInfo[4];
+        return this.password;
     }
 
     /**
@@ -99,7 +108,7 @@ public class User {
      * @param password user's password
      */
     public void setPassword(String password) {
-        this.userInfo[4] = password;
+        this.password = password;
     }
 
     /**
