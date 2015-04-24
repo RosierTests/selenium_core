@@ -18,6 +18,7 @@ import java.util.List;
  * Package: pages
  */
 public class BasePage extends LoadableComponent<BasePage> {
+
     public WebDriver localDriver;
 
     public BasePage(WebDriver driver) {
@@ -30,6 +31,11 @@ public class BasePage extends LoadableComponent<BasePage> {
 
     public void initialize(WebDriver driver) {
         this.localDriver = driver;
+    }
+
+    public void append(String text, WebElement e) {
+        click(e);
+        e.sendKeys(text);
     }
 
     public void click(WebElement e) {
@@ -80,7 +86,7 @@ public class BasePage extends LoadableComponent<BasePage> {
     }
 
     public void navigate_to(String page) {
-        localDriver.navigate().to("http://localhost:3000/" + page);
+        localDriver.navigate().to(System.getProperty("url", "http://no_valid_url") + "/" + page);
     }
 
     public void removeAllCookies() {
