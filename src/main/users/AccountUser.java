@@ -1,4 +1,4 @@
-package utilities.users;
+package users;
 
 /**
  * Created By: bsmith on 2/26/14.

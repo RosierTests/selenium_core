@@ -1,4 +1,4 @@
-package utilities.output;
+package output;
 
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.allure.annotations.Attachment;

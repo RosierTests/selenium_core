@@ -1,4 +1,4 @@
-package utilities.users;
+package users;
 
 import java.util.Random;
 

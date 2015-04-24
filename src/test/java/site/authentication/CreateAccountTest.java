@@ -9,7 +9,7 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import site.BaseTest;
 import site.pages.authentication.CreateAccountPage;
 import site.pages.authentication.LoginPage;
-import utilities.users.User;
+import users.User;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
