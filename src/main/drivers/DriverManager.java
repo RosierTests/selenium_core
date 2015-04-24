@@ -45,7 +45,7 @@ public class DriverManager {
                 }
 
                 // Get the browser property and set it if available.
-                String browserProperty = System.getProperty("browser", "firefox");
+                String browserProperty = System.getProperty("browser", "none");
                 Browser chosenBrowser;
                 switch (browserProperty.toLowerCase()) {
                     case "chrome":
@@ -67,7 +67,7 @@ public class DriverManager {
                 switch (chosenBrowser) {
                     case CHROME:
                         // Change the driver location based on the operating system name found, above.
-                        String driverLocation = "src/main/utilities/drivers/local/chrome/chromedriver-2.12-" + osNameShort;
+                        String driverLocation = "src/main/drivers/local/chrome/chromedriver-2.15-" + osNameShort;
                         System.setProperty("webdriver.chrome.driver", driverLocation);
 
                         ChromeOptions options = new ChromeOptions();
