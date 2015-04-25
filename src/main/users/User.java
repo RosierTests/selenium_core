@@ -24,10 +24,15 @@ public class User {
      * @param password password
      */
     public User(String firstName, String lastName, String email, String userName, String password) {
+        String id = generateRandomID();
+
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
-        this.userName = userName;
+
+        String[] set = email.split("@");
+        this.email = set[0] + "-" + id + "@" + set[1];
+
+        this.userName = userName + "-" + id;
         this.password = password;
     }
 
@@ -116,7 +121,7 @@ public class User {
      * This method allows dynamic user creation during runtime, when needed.
      * @return random ID from 0a0a0a to 9z9z9z
      */
-    private static String generateRandomUserNameID() {
+    private String generateRandomID() {
         Random numberGenerator = new Random();
         String id = "";
         String alphaCharacterSet = "abcdefghijklmnopqrstuvwxyz";
