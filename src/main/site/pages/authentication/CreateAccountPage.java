@@ -42,13 +42,13 @@ public class CreateAccountPage extends BasePage{
     @FindBy(name = "firstname")
     public WebElement firstNameInput;
 
-    @FindBy(css = "form .row:nth-child(2) .name-field:first-child .error")
+    @FindBy(css = "form .row:nth-child(1) .name-field:first-child .error")
     public WebElement firstNameInputError;
 
     @FindBy(name = "lastname")
     public WebElement lastNameInput;
 
-    @FindBy(css = "form .row:nth-child(2) .name-field:nth-child(2) .error")
+    @FindBy(css = "form .row:nth-child(1) .name-field:nth-child(2) .error")
     public WebElement lastNameInputError;
 
     @FindBy(name = "email")
@@ -60,7 +60,7 @@ public class CreateAccountPage extends BasePage{
     @FindBy(name = "username")
     public WebElement userNameInput;
 
-    @FindBy(css = "form .row:nth-child(4) .name-field .error")
+    @FindBy(css = "form .row:nth-child(3) .name-field .error")
     public WebElement userNameInputError;
 
     @FindBy(name = "password")
@@ -122,7 +122,7 @@ public class CreateAccountPage extends BasePage{
      * @param password user's password
      * @param confirmPassword user's password
      */
-    @Step("Submit account creation request with first name \"{0}\", last name \"{1}\", email \"{2}\", username \"{3}\", password \"{4}\", and confirm password \"{5}\".")
+    @Step("Create account with first name \"{0}\", last name \"{1}\", email \"{2}\", username \"{3}\", password \"{4}\", and confirm password \"{5}\".")
     public void submitAccountCreationRequest(String firstName, String lastName, String email, String userName, String password,
                                   String confirmPassword) {
         input(firstName, firstNameInput);

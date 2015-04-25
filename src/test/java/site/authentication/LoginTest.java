@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 public class LoginTest extends BaseTest{
     private LoginPage loginPage;
     private User user = new User("Tywin", "Lannister", "tlannister@gmail.com", "tlannister", "Pass1234");
-    private String emailErrorText = "You must enter a valid email address.";
+    private String emailErrorText = "You must enter a valid username.";
     private String passwordErrorText = "You must enter your password.";
 
     @Before
@@ -48,14 +48,14 @@ public class LoginTest extends BaseTest{
     @Stories("Login without password")
     @Test
     public void loginWithoutPassword() throws Exception {
-        loginPage.submitLogin(user.getEmail(), "", false);
+        loginPage.submitLogin(user.getUserName(), "", false);
         assertThat("Check login error messages!", loginPage.getInputErrors(), is(equalTo(passwordErrorText)));
     }
 
     @Features("Login")
     @Stories("Login without email")
     @Test
-    public void loginWithoutEmail() throws Exception {
+    public void loginWithoutUsername() throws Exception {
         loginPage.submitLogin("", user.getPassword(), false);
         assertThat("Check login error messages!", loginPage.getInputErrors(), is(equalTo(emailErrorText)));
     }
@@ -64,9 +64,9 @@ public class LoginTest extends BaseTest{
     @Stories("Login with invalid credentials")
     @Test
     public void loginWithInvalidCredentials() throws Exception {
-        loginPage.submitLogin("nouser@gmail.com", "Pass1234", false);
+        loginPage.submitLogin("nouser", "Pass1234", false);
         assertThat("Check flash alert message!", loginPage.getFlashAlertError(),
-                is(equalTo("You have entered an invalid email or password.")));
+                is(equalTo("You have entered an invalid username or password.")));
     }
 
     @Features("Login")
@@ -75,7 +75,7 @@ public class LoginTest extends BaseTest{
     public void loginWithValidCredentials() throws Exception {
         Accounts.createAccount(user.getFirstName(), user.getLastName(), user.getEmail(),
                 user.getUserName(), user.getPassword());
-        loginPage.submitLogin(user.getEmail(), user.getPassword(), false);
+        loginPage.submitLogin(user.getUserName(), user.getPassword(), false);
         assertThat("Cannot log into account.", loginPage.getPageTitle(), is(equalTo("TestDriver - Gateway")));
     }
 

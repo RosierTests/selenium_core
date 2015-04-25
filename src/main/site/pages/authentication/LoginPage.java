@@ -18,8 +18,8 @@ import static org.hamcrest.core.Is.is;
  * Description: This page represents the login page.
  */
 public class LoginPage extends BasePage{
-    @Parameter("Email Error Message")
-    private String emailErrorMessage;
+    @Parameter("Username Error Message")
+    private String usernameErrorMessage;
 
     @Parameter("Password Error Message")
     private String passwordErrorMessage;
@@ -30,11 +30,11 @@ public class LoginPage extends BasePage{
     @Parameter("App Version")
     private String appVersion;
 
-    @FindBy(css = ".email-field input")
-    public WebElement emailInput;
+    @FindBy(css = ".text-field input")
+    public WebElement usernameInput;
 
-    @FindBy(css = ".email-field small:last-child")
-    public WebElement emailInputError;
+    @FindBy(css = ".text-field small:last-child")
+    public WebElement usernameInputError;
 
     @FindBy(css = ".password-field input")
     public WebElement passwordInput;
@@ -83,13 +83,13 @@ public class LoginPage extends BasePage{
     /**
      * Enter your account credentials, select if credentials are cached, and submit. You can enter empty strings for
      * email address or password to test for errors.
-     * @param email your account email address
+     * @param username your account email address
      * @param password your account password
      * @param isCached is your account info cached?
      */
-    @Step("Submit login with email \"{0}\" and password \"{1}\".")
-    public void submitLogin(String email, String password, Boolean isCached) {
-        input(email, emailInput);
+    @Step("Submit login with username \"{0}\" and password \"{1}\".")
+    public void submitLogin(String username, String password, Boolean isCached) {
+        input(username, usernameInput);
         input(password, passwordInput);
 
         if (isCached) { click(rememberComputer); }
@@ -104,9 +104,9 @@ public class LoginPage extends BasePage{
     public String getInputErrors() {
         String concatenatedErrorMessage = "";
 
-        if (elementDisplays(emailInputError)) {
-            emailErrorMessage = emailInputError.getText();
-            concatenatedErrorMessage += emailErrorMessage;
+        if (elementDisplays(usernameInputError)) {
+            usernameErrorMessage = usernameInputError.getText();
+            concatenatedErrorMessage += usernameErrorMessage;
         }
 
         if (!concatenatedErrorMessage.equals("") && elementDisplays(passwordInputError)) {concatenatedErrorMessage += "|";}
