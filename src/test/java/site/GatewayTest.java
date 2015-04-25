@@ -10,6 +10,7 @@ import ru.yandex.qatools.allure.annotations.Stories;
 import site.pages.GatewayPage;
 import site.pages.authentication.LoginPage;
 import users.Accounts;
+import users.User;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
@@ -21,13 +22,14 @@ import static org.junit.Assert.assertThat;
  */
 @Description("Verify various home page data elements and controls.")
 public class GatewayTest extends BaseTest{
-    private static String[] user = new String[]{"Daenerys", "Targaryen", "dtargaryen@gmail.com",
-            "dtargaryen", "Pass1234"};
+    private static User user = new User("Daenerys", "Targaryen", "dtargaryen@gmail.com",
+            "dtargaryen", "Pass1234");
     private GatewayPage gatewayPage;
 
     @BeforeClass
     public static void createAccountBeforeExecution() {
-        Accounts.createAccount(user[0], user[1], user[2], user[3], user[4]);
+        Accounts.createAccount(user.getFirstName(), user.getLastName(), user.getEmail(), user.getUserName(),
+                user.getPassword());
     }
 
     @Before
@@ -35,7 +37,7 @@ public class GatewayTest extends BaseTest{
         openBrowser(testName.getMethodName());
 
         LoginPage loginPage = new LoginPage(localDriver);
-        gatewayPage = new GatewayPage(localDriver, loginPage, user[2], user[4]);
+        gatewayPage = new GatewayPage(localDriver, loginPage, user.getUserName(), user.getPassword());
         gatewayPage.get();
     }
 
@@ -44,7 +46,7 @@ public class GatewayTest extends BaseTest{
     @Test
     public void verifyWelcomeMessage() throws Exception {
         assertThat("Welcome message is incorrect.", gatewayPage.getWelcomeMessage(),
-                is(equalTo("Welcome, " + user[0] + " " + user[1] + ".")));
+                is(equalTo("Welcome, " + user.getFirstName() + " " + user.getLastName() + ".")));
     }
 
     @Features("Gateway")
