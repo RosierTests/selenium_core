@@ -14,7 +14,7 @@
         <allure.version>1.4.15</allure.version>
         <allure.maven.version>2.0</allure.maven.version>
         <aspectj.version>1.8.3</aspectj.version>
-        <ashot.version>1.4.8</ashot.version>
+        <ashot.version>1.4.12</ashot.version>
     </properties>
 
     <dependencies>
